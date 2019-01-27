@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,22 +11,33 @@ public class DayCount : MonoBehaviour {
     public bool isCuttable;
     public Collider2D treeCollider;
     public Collider2D playerCollider;
+    public Collider2D homeCollider;
     public bool playerInRange;
     public int numberWood;
     SpriteRenderer sr;
     GameObject player;
     GameObject tree;
-	// Use this for initialization
-	void Start () {
+    GameObject home1;
+    GameObject home2;
+    public bool upgrade;
+    public bool winGame;
+
+    // Use this for initialization
+    void Start () {
         numberWood = 0;
-		time = 5;
+		time = 1;
         sr = GetComponent<SpriteRenderer>();
         player = GameObject.Find("Player");
+        home1 = GameObject.Find("Home");
+        home2 = GameObject.Find("FinishedHome");
+        upgrade = false;
         isCuttable = false;
         playerInRange = false;
-        treeCollider = GameObject.Find("treeFirst").GetComponent<Collider2D>();
+        winGame = false;
+        treeCollider = GameObject.FindGameObjectWithTag("Tree").GetComponent<Collider2D>();
         playerCollider = GameObject.Find("Player").GetComponent<Collider2D>();
-        tree = GameObject.Find("treeFirst");
+        homeCollider = GameObject.Find("Home").GetComponent<Collider2D>();
+        tree = GameObject.FindGameObjectWithTag("Tree");
         tree.layer = LayerMask.NameToLayer("Player");
     }
 	
@@ -37,18 +49,30 @@ public class DayCount : MonoBehaviour {
         {
             mature();
             //Debug.Log("Next Day");
-            time = 5;
+            time = 1;
         }
 
         if (treeCollider.IsTouching(playerCollider))
         {
             playerInRange = true;
-            tree.layer = LayerMask.NameToLayer("Tree");
+            
             //Debug.Log("test");
         }else
         {
             playerInRange = false;
-            tree.layer = LayerMask.NameToLayer("Player");
+            
+        }
+        if(numberWood >= 1)
+        {
+            upgrade = true;
+        }
+        if(homeCollider.IsTouching(playerCollider) && upgrade == true)
+        {
+            {
+                winGame = true;
+                home1.SetActive(false);
+                home2.SetActive(true);
+            }
         }
 
         if(playerInRange == true && isCuttable == true)
@@ -62,8 +86,9 @@ public class DayCount : MonoBehaviour {
                 Debug.Log(numberWood);
             }
         }
-
+        
 	}
+
     void mature()
     {
         if(sr.sprite == tree1)
