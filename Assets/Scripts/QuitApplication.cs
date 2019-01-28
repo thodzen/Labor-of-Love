@@ -10,5 +10,13 @@ public class QuitApplication : MonoBehaviour
         Debug.Log("Application has ended.");
     }
 
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+            Debug.Log("Application has ended.");
+        }
+    }
 }
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DayCount : MonoBehaviour {
     public float time;
@@ -15,21 +16,26 @@ public class DayCount : MonoBehaviour {
     public bool playerInRange;
     public int numberWood;
     SpriteRenderer sr;
+    private Animator anim;
+    GameObject[] trees;
     GameObject player;
-    GameObject tree;
     GameObject home1;
-    GameObject home2;
+    //GameObject home2;
     public bool upgrade;
     public bool winGame;
 
+    public string sceneName;
+
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         numberWood = 0;
-		time = 1;
+        time = 5;
         sr = GetComponent<SpriteRenderer>();
         player = GameObject.Find("Player");
         home1 = GameObject.Find("Home");
-        home2 = GameObject.Find("FinishedHome");
+       // home2 = GameObject.Find("FinishedHome");
+
         upgrade = false;
         isCuttable = false;
         playerInRange = false;
@@ -37,57 +43,51 @@ public class DayCount : MonoBehaviour {
         treeCollider = GameObject.FindGameObjectWithTag("Tree").GetComponent<Collider2D>();
         playerCollider = GameObject.Find("Player").GetComponent<Collider2D>();
         homeCollider = GameObject.Find("Home").GetComponent<Collider2D>();
-        tree = GameObject.FindGameObjectWithTag("Tree");
-        tree.layer = LayerMask.NameToLayer("Player");
+        trees = GameObject.FindGameObjectsWithTag("Tree");
+
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         time -= Time.deltaTime;
         //Debug.Log(time);
-        if(time <= 0)
+        if (time <= 0)
         {
             mature();
             //Debug.Log("Next Day");
-            time = 1;
+            time = 5;
         }
 
-        if (treeCollider.IsTouching(playerCollider))
-        {
-            playerInRange = true;
-            
-            //Debug.Log("test");
-        }else
-        {
-            playerInRange = false;
-            
-        }
-        if(numberWood >= 1)
-        {
-            upgrade = true;
-        }
-        if(homeCollider.IsTouching(playerCollider) && upgrade == true)
-        {
-            {
-                winGame = true;
-                home1.SetActive(false);
-                home2.SetActive(true);
-            }
-        }
-
-        if(playerInRange == true && isCuttable == true)
+        if (playerInRange == true && isCuttable == true)
         {
             if (Input.GetKeyDown("space"))
             {
-                sr.sprite = tree1;
+                this.sr.sprite = tree1;
                 isCuttable = false;
-                transform.localScale -= new Vector3(3F, 3f, 0);
+                this.transform.localScale -= new Vector3(3F, 3f, 0);
                 numberWood++;
                 Debug.Log(numberWood);
             }
         }
-        
-	}
+        if (numberWood >= 1)
+        {
+            upgrade = true;
+        }
+        if (homeCollider.IsTouching(playerCollider) && upgrade == true)
+        {
+            {
+                winGame = true;
+               // home1.SetActive(false);
+               // home2.SetActive(true);
+                SceneManager.LoadScene("Home is where the heart is", LoadSceneMode.Single);
+                StartCoroutine(LoadCurrentScene());
+                Debug.Log("yeet");
+            }
+        }
+
+    }
 
     void mature()
     {
@@ -103,5 +103,38 @@ public class DayCount : MonoBehaviour {
             isCuttable = true;
         }
     }
+    void OnCollisionEnter2D(Collision2D col)
 
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            playerInRange = true;
+
+            //Debug.Log("test");
+        }
+
+
+    }
+    void OnCollisionExit2D(Collision2D col)
+
+    {
+        if (col.gameObject.tag == "Player")
+        {
+            playerInRange = false;
+
+            //Debug.Log("test");
+        }
+
+
+    }
+
+    IEnumerator LoadCurrentScene()
+    {
+        //Debug.Log("PRESSED BUTTON");
+        //transitionAnim.SetTrigger("end long");
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+    }
 }
+

@@ -5,13 +5,25 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/Title Screen.unity
     guid: 75fe8c13d27e8c94b884aa53e1306f21
   - enabled: 1
+    path: Assets/Scenes/Home is what you make it.unity
+    guid: e4759f7806f31e346b1fa572ccdb33c3
+  - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: eb95be4661e0863419790726d9324996
+  - enabled: 1
+    path: Assets/Scenes/Home is where the heart is.unity
+    guid: 6498f57333351f841a6a79a2a1fe67e9
+  - enabled: 1
+    path: Assets/Scenes/Bus Arrival.unity
+    guid: 19927ecef26501943af1ede7d3385430
+  - enabled: 1
+    path: Assets/Scenes/Dedication.unity
+    guid: 88699d75ef9024144a0ce19cb6e6dd67
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: 4cbe728864ff0ce4b9228b520f113036
   m_configObjects: {}
